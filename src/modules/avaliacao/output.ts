@@ -1,3 +1,5 @@
+import type { Avaliacao } from "./domain/AvaliacaoDeLivro";
+
 export type AvaliacaoJson = {
   id: number;
   numeroRegistro: string;
