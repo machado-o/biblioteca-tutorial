@@ -1,3 +1,5 @@
+import { getBodyAsObject, getFieldAsPositiveInt, getFieldAsText } from "../../../../shared/validation";
+
 export type NovaAvaliacao = {
   numeroRegistro: string;
   matricula: string;
