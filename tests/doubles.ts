@@ -50,6 +50,16 @@ export class InMemoryLivroRepository implements LivroRepository {
       autorIds.some((autorId) => item.autorId.equals(autorId)),
     );
   }
+
+  findById(id: LivroId): Livro | null {
+    return this.items.find((livro) => livro.id?.equals(id)) ?? null;
+  }
+
+  updateTitulo(livro: Livro): void {
+    this.items = this.items.map((atual) =>
+      atual.id?.equals(livro.id!) ? livro : atual,
+    );
+  }
 }
 
 export class InMemoryAutoria implements ConsultaDeAutoria {
