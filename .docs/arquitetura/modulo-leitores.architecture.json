@@ -1,0 +1,355 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Módulo Leitores (readers) — fatias verticais",
+    "output": "modulo-leitores.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "route.ts da fatia"
+        },
+        "backend": {
+          "label": "Classe da fatia e repositório"
+        },
+        "messagebus": {
+          "label": "Integração entre módulos"
+        }
+      }
+    },
+    "views": [
+      {
+        "id": "fatias",
+        "label": "Uma classe por fatia",
+        "focus": [
+          "uc09",
+          "uc10",
+          "uc11",
+          "uc12",
+          "cadastrar",
+          "buscar",
+          "atualizar",
+          "excluir"
+        ],
+        "note": "Cada route.ts instancia a classe da sua fatia com o repositório Postgres."
+      },
+      {
+        "id": "persistencia",
+        "label": "Persistência",
+        "focus": [
+          "cadastrar",
+          "buscar",
+          "atualizar",
+          "excluir",
+          "repo",
+          "pg"
+        ],
+        "note": "Todas as classes dependem da porta ReaderRepository, implementada por PostgresReaderRepository."
+      },
+      {
+        "id": "historico",
+        "label": "Exclusão com histórico",
+        "focus": [
+          "uc12",
+          "excluir",
+          "historico",
+          "pg"
+        ],
+        "note": "DeleteReader só apaga leitor sem reservas nem empréstimos, consultados por src/integration."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "uc09",
+      "type": "frontend",
+      "label": "route.ts · UC09",
+      "sublabel": "POST /leitores",
+      "pos": [
+        60,
+        60
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "uc10",
+      "type": "frontend",
+      "label": "route.ts · UC10",
+      "sublabel": "GET /leitores",
+      "pos": [
+        320,
+        60
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "uc11",
+      "type": "frontend",
+      "label": "route.ts · UC11",
+      "sublabel": "PUT /leitores/:id",
+      "pos": [
+        580,
+        60
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "uc12",
+      "type": "frontend",
+      "label": "route.ts · UC12",
+      "sublabel": "DELETE /leitores/:id",
+      "pos": [
+        840,
+        60
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "cadastrar",
+      "type": "backend",
+      "label": "CreateReader",
+      "sublabel": "CPF único",
+      "pos": [
+        60,
+        220
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "buscar",
+      "type": "backend",
+      "label": "SearchReaders",
+      "sublabel": "nome · e-mail · CPF · id",
+      "pos": [
+        320,
+        220
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "atualizar",
+      "type": "backend",
+      "label": "UpdateReader",
+      "sublabel": "mantém CPF próprio",
+      "pos": [
+        580,
+        220
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "excluir",
+      "type": "backend",
+      "label": "DeleteReader",
+      "sublabel": "só sem histórico",
+      "pos": [
+        840,
+        220
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "repo",
+      "type": "backend",
+      "label": "PostgresReaderRepository",
+      "sublabel": "ReaderRepository",
+      "pos": [
+        430,
+        390
+      ],
+      "size": [
+        220,
+        64
+      ],
+      "tag": "infrastructure/"
+    },
+    {
+      "id": "historico",
+      "type": "messagebus",
+      "label": "PostgresReaderHistory",
+      "sublabel": "ReaderHistory",
+      "pos": [
+        1110,
+        390
+      ],
+      "size": [
+        200,
+        64
+      ],
+      "tag": "src/integration"
+    },
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "tabela leitores",
+      "pos": [
+        700,
+        560
+      ],
+      "size": [
+        180,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "features/create-reader",
+      "wraps": [
+        "uc09",
+        "cadastrar"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "features/search-readers",
+      "wraps": [
+        "uc10",
+        "buscar"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "features/update-reader",
+      "wraps": [
+        "uc11",
+        "atualizar"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "features/delete-reader",
+      "wraps": [
+        "uc12",
+        "excluir"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "uc09-c",
+      "from": "uc09",
+      "to": "cadastrar",
+      "variant": "emphasis"
+    },
+    {
+      "id": "uc10-b",
+      "from": "uc10",
+      "to": "buscar",
+      "variant": "emphasis"
+    },
+    {
+      "id": "uc11-a",
+      "from": "uc11",
+      "to": "atualizar",
+      "variant": "emphasis"
+    },
+    {
+      "id": "uc12-e",
+      "from": "uc12",
+      "to": "excluir",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c-repo",
+      "from": "cadastrar",
+      "to": "repo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "b-repo",
+      "from": "buscar",
+      "to": "repo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "a-repo",
+      "from": "atualizar",
+      "to": "repo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e-repo",
+      "from": "excluir",
+      "to": "repo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "e-hist",
+      "from": "excluir",
+      "to": "historico",
+      "label": "tem histórico?",
+      "variant": "dashed"
+    },
+    {
+      "id": "repo-pg",
+      "from": "repo",
+      "to": "pg",
+      "label": "leitores"
+    },
+    {
+      "id": "hist-pg",
+      "from": "historico",
+      "to": "pg",
+      "label": "reservas · emprestimos",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Fatias",
+      "items": [
+        "Cada features/<fatia>/ tem o route.ts e a classe do caso",
+        "Erros de domínio viram 400, 404 ou 409 no server.ts"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Domínio",
+      "items": [
+        "Reader normaliza CPF, e-mail, nome e telefone",
+        "CPF com dígito verificador e sem duplicidade"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Portas",
+      "items": [
+        "ReaderRepository e ReaderHistory ficam em domain/",
+        "Testes usam dublês em memória das duas portas"
+      ]
+    }
+  ]
+}

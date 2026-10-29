@@ -1,0 +1,26 @@
+{
+  "name": "biblioteca",
+  "module": "src/main.ts",
+  "type": "module",
+  "imports": {
+    "#tests/*": "./tests/*.ts"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/main.ts",
+    "start": "bun src/main.ts",
+    "test": "bun test",
+    "import-books": "bun src/import-books.ts",
+    "check-boundaries": "bun scripts/check-boundaries.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  },
+  "dependencies": {
+    "hono": "^4.13.5"
+  }
+}

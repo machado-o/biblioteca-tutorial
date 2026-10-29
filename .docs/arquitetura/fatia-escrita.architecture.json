@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Fatia de escrita — register-loan · UC19",
+    "output": "fatia-escrita.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Tela"
+        },
+        "backend": {
+          "label": "Código da fatia e do módulo"
+        },
+        "security": {
+          "label": "Validação HTTP"
+        },
+        "cloud": {
+          "label": "Transação"
+        },
+        "messagebus": {
+          "label": "Adapter de integração"
+        }
+      }
+    },
+    "views": [
+      {
+        "id": "entrada",
+        "label": "Entrada HTTP",
+        "focus": [
+          "ui",
+          "uc",
+          "http"
+        ],
+        "note": "register-loan/route.ts recebe o POST e transforma o corpo JSON em dois IDs válidos antes de chegar ao domínio."
+      },
+      {
+        "id": "transacao",
+        "label": "Transação",
+        "focus": [
+          "uc",
+          "tx",
+          "caso"
+        ],
+        "note": "O caso roda dentro de inTransaction: BEGIN, advisory lock 22001, regras, gravação e COMMIT."
+      },
+      {
+        "id": "regras",
+        "label": "Regras e gravação",
+        "focus": [
+          "caso",
+          "consulta",
+          "repo",
+          "pg"
+        ],
+        "note": "Confere leitor e exemplar, limite de 3, cópia livre e reserva; depois insere o empréstimo."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "Tela uc19.tsx",
+      "sublabel": "formulário React",
+      "pos": [
+        40,
+        250
+      ],
+      "size": [
+        220,
+        64
+      ]
+    },
+    {
+      "id": "uc",
+      "type": "backend",
+      "label": "register-loan/route.ts",
+      "sublabel": "rota POST /emprestimos",
+      "pos": [
+        330,
+        250
+      ],
+      "size": [
+        240,
+        64
+      ],
+      "tag": "UC19 · compõe a fatia"
+    },
+    {
+      "id": "http",
+      "type": "security",
+      "label": "shared/http",
+      "sublabel": "readJsonBody · parsePositiveId",
+      "pos": [
+        330,
+        440
+      ],
+      "size": [
+        240,
+        64
+      ]
+    },
+    {
+      "id": "tx",
+      "type": "cloud",
+      "label": "inTransaction",
+      "sublabel": "BEGIN · lock 22001 · COMMIT",
+      "pos": [
+        520,
+        70
+      ],
+      "size": [
+        240,
+        64
+      ]
+    },
+    {
+      "id": "caso",
+      "type": "backend",
+      "label": "RegisterLoan",
+      "sublabel": "extends CirculationUseCase",
+      "pos": [
+        740,
+        250
+      ],
+      "size": [
+        220,
+        64
+      ],
+      "tag": "regras do caso"
+    },
+    {
+      "id": "consulta",
+      "type": "messagebus",
+      "label": "PostgresCirculationLookup",
+      "sublabel": "porta CirculationLookup",
+      "pos": [
+        725,
+        440
+      ],
+      "size": [
+        250,
+        64
+      ],
+      "tag": "src/integration"
+    },
+    {
+      "id": "repo",
+      "type": "backend",
+      "label": "PostgresCirculationRepository",
+      "sublabel": "porta CirculationRepository",
+      "pos": [
+        1090,
+        250
+      ],
+      "size": [
+        270,
+        64
+      ]
+    },
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "mesma transação tx",
+      "pos": [
+        1115,
+        440
+      ],
+      "size": [
+        220,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "modules/circulation",
+      "wraps": [
+        "uc",
+        "caso",
+        "repo"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "post",
+      "from": "ui",
+      "to": "uc",
+      "label": "① POST JSON",
+      "variant": "emphasis"
+    },
+    {
+      "id": "validar",
+      "from": "uc",
+      "to": "http",
+      "label": "② valida ids",
+      "variant": "security",
+      "labelDy": 24
+    },
+    {
+      "id": "abrir",
+      "from": "uc",
+      "to": "tx",
+      "label": "③ abre transação",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "executar",
+      "from": "tx",
+      "to": "caso",
+      "label": "④ execute(ids)",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "vinculos",
+      "from": "caso",
+      "to": "consulta",
+      "label": "⑤ leitor? exemplar?",
+      "variant": "dashed",
+      "labelDy": 24
+    },
+    {
+      "id": "gravar",
+      "from": "caso",
+      "to": "repo",
+      "label": "⑥ regras + INSERT",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sel",
+      "from": "consulta",
+      "to": "pg",
+      "label": "SELECT",
+      "variant": "dashed",
+      "labelDy": 24
+    },
+    {
+      "id": "ins",
+      "from": "repo",
+      "to": "pg",
+      "label": "INSERT · UPDATE",
+      "variant": "emphasis",
+      "labelDy": 24
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "O que tem na fatia",
+      "items": [
+        "register-loan/route.ts: rota, validação e composição",
+        "RegisterLoan: limite de 3, cópia livre, reserva",
+        "Devolução prevista em 14 dias"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Por que a transação",
+      "items": [
+        "O lock serializa as escritas concorrentes",
+        "Quatro pedidos simultâneos geram só três empréstimos"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Erros",
+      "items": [
+        "InvalidInput → 400, NotFound → 404",
+        "RuleConflict → 409 e ROLLBACK de tudo"
+      ]
+    }
+  ]
+}

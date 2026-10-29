@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Módulo Circulação (circulation) — fatias verticais",
+    "output": "modulo-circulacao.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Fatia vertical (features/*/route.ts)"
+        },
+        "backend": {
+          "label": "Código do módulo"
+        },
+        "messagebus": {
+          "label": "Integração entre módulos"
+        }
+      }
+    },
+    "views": [
+      {
+        "id": "reservas",
+        "label": "Fatias de reservas",
+        "focus": [
+          "uc17",
+          "uc18",
+          "uc22",
+          "base",
+          "repo"
+        ],
+        "note": "Reservar, cancelar e consultar reservas: até duas por leitor, sete dias de exclusividade."
+      },
+      {
+        "id": "emprestimos",
+        "label": "Fatias de empréstimos",
+        "focus": [
+          "uc19",
+          "uc20",
+          "uc21",
+          "base",
+          "repo"
+        ],
+        "note": "Emprestar, devolver e consultar: até três por leitor, prazo de 14 dias."
+      },
+      {
+        "id": "dependencias",
+        "label": "Dependências da transação",
+        "focus": [
+          "base",
+          "repo",
+          "consulta",
+          "pg"
+        ],
+        "note": "circulationDependencies(db) entrega as duas portas ligadas à mesma transação."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "uc17",
+      "type": "frontend",
+      "label": "reserve-copy · UC17",
+      "sublabel": "ReserveCopy",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "uc18",
+      "type": "frontend",
+      "label": "cancel-reservation · UC18",
+      "sublabel": "CancelReservation",
+      "pos": [
+        250,
+        60
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "uc22",
+      "type": "frontend",
+      "label": "list-reservations · UC22",
+      "sublabel": "ListReservations",
+      "pos": [
+        460,
+        60
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "uc19",
+      "type": "frontend",
+      "label": "register-loan · UC19",
+      "sublabel": "RegisterLoan",
+      "pos": [
+        720,
+        60
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "uc20",
+      "type": "frontend",
+      "label": "register-return · UC20",
+      "sublabel": "RegisterReturn",
+      "pos": [
+        930,
+        60
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "uc21",
+      "type": "frontend",
+      "label": "list-loans · UC21",
+      "sublabel": "ListLoans",
+      "pos": [
+        1140,
+        60
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "base",
+      "type": "backend",
+      "label": "CirculationUseCase",
+      "sublabel": "vínculos · situação · Clock",
+      "pos": [
+        585,
+        230
+      ],
+      "size": [
+        200,
+        64
+      ],
+      "tag": "domain/"
+    },
+    {
+      "id": "repo",
+      "type": "backend",
+      "label": "PostgresCirculationRepository",
+      "sublabel": "CirculationRepository",
+      "pos": [
+        305,
+        400
+      ],
+      "size": [
+        250,
+        64
+      ]
+    },
+    {
+      "id": "consulta",
+      "type": "messagebus",
+      "label": "PostgresCirculationLookup",
+      "sublabel": "CirculationLookup",
+      "pos": [
+        840,
+        400
+      ],
+      "size": [
+        220,
+        64
+      ],
+      "tag": "src/integration"
+    },
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "inTransaction",
+      "pos": [
+        585,
+        570
+      ],
+      "size": [
+        200,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "features · reservas",
+      "wraps": [
+        "uc17",
+        "uc18",
+        "uc22"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "features · empréstimos",
+      "wraps": [
+        "uc19",
+        "uc20",
+        "uc21"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "uc17-b",
+      "from": "uc17",
+      "to": "base",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc18-b",
+      "from": "uc18",
+      "to": "base",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc22-b",
+      "from": "uc22",
+      "to": "base",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc19-b",
+      "from": "uc19",
+      "to": "base",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc20-b",
+      "from": "uc20",
+      "to": "base",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc21-b",
+      "from": "uc21",
+      "to": "base",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "base-repo",
+      "from": "base",
+      "to": "repo",
+      "label": "grava",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "emphasis"
+    },
+    {
+      "id": "base-consulta",
+      "from": "base",
+      "to": "consulta",
+      "label": "leitor · exemplar",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "dashed"
+    },
+    {
+      "id": "repo-pg",
+      "from": "repo",
+      "to": "pg",
+      "label": "reservas · emprestimos",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "consulta-pg",
+      "from": "consulta",
+      "to": "pg",
+      "label": "leitores · exemplares",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Fatias",
+      "items": [
+        "Cada route.ts de escrita abre inTransaction e instancia sua classe",
+        "As seis classes estendem CirculationUseCase"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Regras",
+      "items": [
+        "Reserva: 2 por leitor, 7 dias, expira no 8º dia",
+        "Empréstimo: 3 por leitor contando atrasados, 14 dias",
+        "Limites e prazos ficam em ReserveCopy e RegisterLoan"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Integração",
+      "items": [
+        "CirculationLookup lê leitores e exemplares de outros módulos",
+        "Datas civis no fuso do Brasil via Clock"
+      ]
+    }
+  ]
+}

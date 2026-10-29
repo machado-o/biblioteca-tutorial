@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Fatia de leitura — list-loans · UC21",
+    "output": "fatia-leitura.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Tela"
+        },
+        "backend": {
+          "label": "Código da fatia e do módulo"
+        },
+        "security": {
+          "label": "Validação HTTP"
+        },
+        "cloud": {
+          "label": "Conexão sem transação"
+        },
+        "messagebus": {
+          "label": "Adapter de integração"
+        }
+      }
+    },
+    "views": [
+      {
+        "id": "entrada",
+        "label": "Entrada HTTP",
+        "focus": [
+          "ui",
+          "uc",
+          "http"
+        ],
+        "note": "Os filtros chegam pela query string; leitorId e exemplarId passam por parseIdFilter."
+      },
+      {
+        "id": "sem-transacao",
+        "label": "Sem transação",
+        "focus": [
+          "uc",
+          "conexao",
+          "caso"
+        ],
+        "note": "list-loans/route.ts monta as portas com o sql comum e chama execute(filters): sem BEGIN, lock nem COMMIT."
+      },
+      {
+        "id": "montagem",
+        "label": "Montagem da resposta",
+        "focus": [
+          "caso",
+          "consulta",
+          "repo",
+          "pg"
+        ],
+        "note": "Busca os empréstimos e acrescenta leitor, título, situação e dias de atraso a cada um."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "Tela uc21.tsx",
+      "sublabel": "lista com filtros",
+      "pos": [
+        40,
+        250
+      ],
+      "size": [
+        220,
+        64
+      ]
+    },
+    {
+      "id": "uc",
+      "type": "backend",
+      "label": "list-loans/route.ts",
+      "sublabel": "GET /emprestimos[/:id]",
+      "pos": [
+        330,
+        250
+      ],
+      "size": [
+        240,
+        64
+      ],
+      "tag": "UC21 · compõe a fatia"
+    },
+    {
+      "id": "http",
+      "type": "security",
+      "label": "shared/http",
+      "sublabel": "parseIdFilter · parsePositiveId",
+      "pos": [
+        330,
+        440
+      ],
+      "size": [
+        240,
+        64
+      ]
+    },
+    {
+      "id": "conexao",
+      "type": "cloud",
+      "label": "sql",
+      "sublabel": "infrastructure/postgres.ts",
+      "pos": [
+        520,
+        70
+      ],
+      "size": [
+        240,
+        64
+      ]
+    },
+    {
+      "id": "caso",
+      "type": "backend",
+      "label": "ListLoans",
+      "sublabel": "extends CirculationUseCase",
+      "pos": [
+        740,
+        250
+      ],
+      "size": [
+        220,
+        64
+      ],
+      "tag": "filtra e apresenta"
+    },
+    {
+      "id": "consulta",
+      "type": "messagebus",
+      "label": "PostgresCirculationLookup",
+      "sublabel": "porta CirculationLookup",
+      "pos": [
+        725,
+        440
+      ],
+      "size": [
+        250,
+        64
+      ],
+      "tag": "src/integration"
+    },
+    {
+      "id": "repo",
+      "type": "backend",
+      "label": "PostgresCirculationRepository",
+      "sublabel": "porta CirculationRepository",
+      "pos": [
+        1090,
+        250
+      ],
+      "size": [
+        270,
+        64
+      ]
+    },
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "só SELECT",
+      "pos": [
+        1115,
+        440
+      ],
+      "size": [
+        220,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "modules/circulation",
+      "wraps": [
+        "uc",
+        "caso",
+        "repo"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "get",
+      "from": "ui",
+      "to": "uc",
+      "label": "① GET ?filtros",
+      "variant": "emphasis",
+      "labelDy": -26
+    },
+    {
+      "id": "validar",
+      "from": "uc",
+      "to": "http",
+      "label": "② valida ids",
+      "variant": "security",
+      "labelDy": 24
+    },
+    {
+      "id": "conectar",
+      "from": "uc",
+      "to": "conexao",
+      "label": "③ circulationDependencies(sql)",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "executar",
+      "from": "conexao",
+      "to": "caso",
+      "label": "④ portas sem tx",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "detalhes",
+      "from": "caso",
+      "to": "consulta",
+      "label": "⑥ detalhes por item",
+      "variant": "dashed",
+      "labelDy": 24
+    },
+    {
+      "id": "buscar",
+      "from": "caso",
+      "to": "repo",
+      "label": "⑤ loans()",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sel-det",
+      "from": "consulta",
+      "to": "pg",
+      "label": "SELECT",
+      "variant": "dashed"
+    },
+    {
+      "id": "sel",
+      "from": "repo",
+      "to": "pg",
+      "label": "SELECT",
+      "variant": "emphasis",
+      "labelDy": 24
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "O que tem na fatia",
+      "items": [
+        "list-loans/route.ts: rotas de lista e de detalhe",
+        "ListLoans: valida situação e filtra",
+        "get(id) atende GET /emprestimos/:id"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Diferença da escrita",
+      "items": [
+        "Sem inTransaction, lock, INSERT ou UPDATE",
+        "Situação e dias de atraso são calculados, não gravados"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Erros",
+      "items": [
+        "Situação ou id inválido → 400",
+        "Empréstimo inexistente → 404"
+      ]
+    }
+  ]
+}

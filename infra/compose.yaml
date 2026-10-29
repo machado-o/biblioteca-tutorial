@@ -1,0 +1,51 @@
+name: biblioteca-tutorial
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    environment:
+      # dentro da rede do compose, o banco atende pelo nome do serviço: db
+      DATABASE_URL: postgres://biblioteca:biblioteca@db:5432/biblioteca
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # a suíte de testes, rodando dentro da rede e contra o banco de testes:
+  # docker compose -f infra/compose.yaml run --rm --build test
+  test:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    command: ["bun", "test"]
+    environment:
+      DATABASE_URL: postgres://biblioteca:biblioteca@db:5432/biblioteca_test
+    depends_on:
+      db:
+        condition: service_healthy
+    # com um profile, o "docker compose -f infra/compose.yaml up" não sobe este serviço
+    profiles: ["test"]
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: biblioteca
+      POSTGRES_PASSWORD: biblioteca
+      POSTGRES_DB: biblioteca
+    # sem "ports": o banco não fica exposto no seu computador, só os outros
+    # serviços deste infra/compose.yaml o enxergam, pela rede interna do Docker
+    volumes:
+      # a partir do Postgres 18 o volume é montado em /var/lib/postgresql
+      # (e não mais em /var/lib/postgresql/data)
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U biblioteca -d biblioteca"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  pgdata:

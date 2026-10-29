@@ -1,0 +1,6 @@
+**/node_modules
+backend/data/*.sqlite*
+backend/data/*.csv
+frontend/dist
+.git
+.docs

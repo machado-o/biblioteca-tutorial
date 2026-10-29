@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Módulo Autoria (authorship) — fatias verticais",
+    "output": "modulo-autoria.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Fatia vertical (features/*/route.ts)"
+        },
+        "backend": {
+          "label": "Código do módulo"
+        },
+        "messagebus": {
+          "label": "Integração entre módulos"
+        }
+      }
+    },
+    "views": [
+      {
+        "id": "fatias",
+        "label": "Fatias de autores",
+        "focus": [
+          "uc05",
+          "uc06",
+          "uc07",
+          "uc08",
+          "cadastro",
+          "cache",
+          "pg"
+        ],
+        "note": "Cada fatia faz o próprio INSERT, UPDATE ou DELETE em autores; search, update e delete leem o autor por authors.ts."
+      },
+      {
+        "id": "cache",
+        "label": "Cache da busca (UC06)",
+        "focus": [
+          "uc05",
+          "uc06",
+          "cache",
+          "redis"
+        ],
+        "note": "search-authors lê o Redis antes do Postgres (X-Cache: HIT, MISS, BYPASS); toda escrita invalida a geração depois do COMMIT."
+      },
+      {
+        "id": "contagem",
+        "label": "Contagem de livros",
+        "focus": [
+          "cadastro",
+          "integracao",
+          "pg"
+        ],
+        "note": "Busca, edição e exclusão contam livros pela porta AuthorshipIntegration; editar o autor reindexa os livros dele no Acervo."
+      },
+      {
+        "id": "acervo",
+        "label": "Contagem mantida pelo Acervo",
+        "focus": [
+          "acervo",
+          "pg"
+        ],
+        "note": "Ao gravar livros, o Acervo atualiza livros_no_acervo e invalida o cache de buscas por catalogIntegration, sem importar o módulo."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "uc05",
+      "type": "frontend",
+      "label": "create-author · UC05",
+      "sublabel": "POST /autores",
+      "pos": [
+        60,
+        80
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "uc06",
+      "type": "frontend",
+      "label": "search-authors · UC06",
+      "sublabel": "GET /autores",
+      "pos": [
+        260,
+        80
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "uc07",
+      "type": "frontend",
+      "label": "update-author · UC07",
+      "sublabel": "PUT /autores/:id",
+      "pos": [
+        460,
+        80
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "uc08",
+      "type": "frontend",
+      "label": "delete-author · UC08",
+      "sublabel": "DELETE /autores/:id",
+      "pos": [
+        660,
+        80
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "cache",
+      "type": "backend",
+      "label": "searchCache.ts",
+      "sublabel": "cache-aside · gerações",
+      "pos": [
+        60,
+        300
+      ],
+      "size": [
+        200,
+        64
+      ],
+      "tag": "infrastructure/"
+    },
+    {
+      "id": "cadastro",
+      "type": "backend",
+      "label": "authors.ts",
+      "sublabel": "findAuthor · toAuthorView",
+      "pos": [
+        345,
+        300
+      ],
+      "size": [
+        200,
+        64
+      ],
+      "tag": "infrastructure/"
+    },
+    {
+      "id": "integracao",
+      "type": "messagebus",
+      "label": "authorshipIntegration",
+      "sublabel": "AuthorshipIntegration",
+      "pos": [
+        680,
+        300
+      ],
+      "size": [
+        210,
+        64
+      ],
+      "tag": "src/integration"
+    },
+    {
+      "id": "redis",
+      "type": "database",
+      "label": "Redis 8",
+      "sublabel": "autoria:buscas:*",
+      "pos": [
+        60,
+        520
+      ],
+      "size": [
+        200,
+        64
+      ],
+      "tag": "dados derivados"
+    },
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "tabela autores",
+      "pos": [
+        345,
+        520
+      ],
+      "size": [
+        200,
+        64
+      ]
+    },
+    {
+      "id": "acervo",
+      "type": "messagebus",
+      "label": "catalogIntegration",
+      "sublabel": "syncAuthorBookCounts · bookCountsChanged",
+      "pos": [
+        900,
+        520
+      ],
+      "size": [
+        250,
+        64
+      ],
+      "tag": "vem do Acervo"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "features/*/route.ts",
+      "wraps": [
+        "uc05",
+        "uc06",
+        "uc07",
+        "uc08"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "uc05-cache",
+      "from": "uc05",
+      "to": "cache",
+      "label": "invalida",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "uc06-cache",
+      "from": "uc06",
+      "to": "cache",
+      "label": "lê e grava",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc06-cad",
+      "from": "uc06",
+      "to": "cadastro",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc07-cad",
+      "from": "uc07",
+      "to": "cadastro",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc08-cad",
+      "from": "uc08",
+      "to": "cadastro",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "cad-int",
+      "from": "cadastro",
+      "to": "integracao",
+      "label": "countBooks",
+      "variant": "dashed"
+    },
+    {
+      "id": "cad-pg",
+      "from": "cadastro",
+      "to": "pg",
+      "label": "SELECT autores",
+      "variant": "emphasis",
+      "labelDy": 24
+    },
+    {
+      "id": "int-pg",
+      "from": "integracao",
+      "to": "pg",
+      "label": "COUNT livros",
+      "variant": "dashed"
+    },
+    {
+      "id": "acervo-pg",
+      "from": "acervo",
+      "to": "pg",
+      "label": "UPDATE livros_no_acervo",
+      "variant": "dashed"
+    },
+    {
+      "id": "cache-redis",
+      "from": "cache",
+      "to": "redis",
+      "label": "HSETEX · INCR",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Fatias",
+      "items": [
+        "As fatias chamam createAuthor, searchAuthorsCached, updateAuthor e deleteAuthor",
+        "Excluir recusa autor com livros vinculados"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Domínio",
+      "items": [
+        "Autor do tipo literatura ou didático",
+        "Edição não reduz a categoria abaixo dos livros existentes"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Contratos públicos",
+      "items": [
+        "index.ts exporta prepareAuthorship, invalidateAuthorSearch e os tipos da porta",
+        "O Acervo lê autores por src/integration, sem importar Author"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Cache no Redis",
+      "items": [
+        "Um INCR na geração invalida todas as buscas",
+        "Cada termo vale 60 s (HSETEX); sem Redis, BYPASS"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arquitetura da Biblioteca</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #55627a;
+      --border: #dde2ea;
+      --hover: #f0f4fa;
+      --cyan: #0891b2;
+      --emerald: #059669;
+      --violet: #7c3aed;
+      --amber: #d97706;
+      --rose: #e11d48;
+      --slate: #64748b;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #070b16;
+        --panel: #0d1324;
+        --text: #e5e9f2;
+        --muted: #94a0b8;
+        --border: #1f2a40;
+        --hover: #131b30;
+        --cyan: #22d3ee;
+        --emerald: #34d399;
+        --violet: #a78bfa;
+        --amber: #fbbf24;
+        --rose: #fb7185;
+        --slate: #94a3b8;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.55 ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    }
+    main { max-width: 1080px; margin: 0 auto; padding: 48px 16px 64px; }
+    header h1 { margin: 0 0 8px; font-size: 28px; display: flex; align-items: center; gap: 12px; }
+    header h1::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--cyan); }
+    header p { margin: 0; color: var(--muted); max-width: 68ch; }
+    section { margin-top: 40px; }
+    h2 {
+      margin: 0 0 14px;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .grade { display: grid; gap: 14px; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .grade { grid-template-columns: repeat(2, 1fr); } }
+    a.cartao {
+      display: block;
+      padding: 18px 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cor);
+      border-radius: 12px;
+      color: inherit;
+      text-decoration: none;
+      transition: background .15s, transform .15s;
+    }
+    a.cartao:hover { background: var(--hover); transform: translateY(-2px); }
+    a.cartao:focus-visible { outline: 2px solid var(--cor); outline-offset: 2px; }
+    .titulo { font-weight: 700; font-size: 16px; }
+    .descricao { margin: 6px 0 12px; color: var(--muted); font-size: 13.5px; }
+    .arquivo { font-size: 12px; color: var(--cor); }
+    footer { margin-top: 48px; color: var(--muted); font-size: 12.5px; }
+    code { font: inherit; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Arquitetura da Biblioteca</h1>
+      <p>Diagramas interativos do sistema: visão geral de frontend, backend e infraestrutura, o monólito modular
+        e as fatias verticais de cada módulo. Cada diagrama tem tema claro e escuro, zoom, busca e visitas guiadas.</p>
+    </header>
+
+    <section>
+      <h2>Visão geral</h2>
+      <div class="grade">
+        <a class="cartao" style="--cor: var(--cyan)" href="sistema.html">
+          <div class="titulo">Arquitetura geral</div>
+          <p class="descricao">Navegador, SPA React 19, app Bun + Hono, PostgreSQL 18, Redis 8, a API do Gemini e o Docker Compose, com os caminhos de produção, desenvolvimento e testes.</p>
+          <div class="arquivo">sistema.html</div>
+        </a>
+        <a class="cartao" style="--cor: var(--emerald)" href="monolito-modular.html">
+          <div class="titulo">Monólito modular</div>
+          <p class="descricao">Hono /api carregando as fatias features/*/route.ts dos módulos catalog, authorship, readers e circulation; cada módulo com sua porta em src/integration, e o Redis e o Gemini nos dados derivados.</p>
+          <div class="arquivo">monolito-modular.html</div>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Módulos e fatias verticais</h2>
+      <div class="grade">
+        <a class="cartao" style="--cor: var(--violet)" href="modulo-acervo.html">
+          <div class="titulo">Acervo</div>
+          <p class="descricao">Livros (UC01–04), exemplares (UC13–16) e a busca semântica (UC24) em modules/catalog, sobre books.ts, copies.ts e o índice vetorial bookIndex.ts no Redis.</p>
+          <div class="arquivo">modulo-acervo.html</div>
+        </a>
+        <a class="cartao" style="--cor: var(--amber)" href="modulo-autoria.html">
+          <div class="titulo">Autoria</div>
+          <p class="descricao">Autores (UC05–08) em modules/authorship: cada fatia faz o próprio SQL, a busca tem cache no Redis e a contagem de livros vem de src/integration.</p>
+          <div class="arquivo">modulo-autoria.html</div>
+        </a>
+        <a class="cartao" style="--cor: var(--rose)" href="modulo-leitores.html">
+          <div class="titulo">Leitores</div>
+          <p class="descricao">Leitores (UC09–12) em modules/readers, uma classe por fatia, com exclusão condicionada ao histórico.</p>
+          <div class="arquivo">modulo-leitores.html</div>
+        </a>
+        <a class="cartao" style="--cor: var(--slate)" href="modulo-circulacao.html">
+          <div class="titulo">Circulação</div>
+          <p class="descricao">Reservas (UC17, UC18, UC22) e empréstimos (UC19–21) em modules/circulation, sobre CirculationUseCase.</p>
+          <div class="arquivo">modulo-circulacao.html</div>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Dentro de uma fatia</h2>
+      <div class="grade">
+        <a class="cartao" style="--cor: var(--rose)" href="fatia-escrita.html">
+          <div class="titulo">Fatia de escrita — register-loan · UC19</div>
+          <p class="descricao">POST /emprestimos passo a passo: validação, inTransaction com lock, regras de RegisterLoan e INSERT.</p>
+          <div class="arquivo">fatia-escrita.html</div>
+        </a>
+        <a class="cartao" style="--cor: var(--emerald)" href="fatia-leitura.html">
+          <div class="titulo">Fatia de leitura — list-loans · UC21</div>
+          <p class="descricao">GET /emprestimos passo a passo: filtros, sql sem transação, ListLoans e só SELECT.</p>
+          <div class="arquivo">fatia-leitura.html</div>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      Cada diagrama é gerado a partir do <code>.architecture.json</code> de mesmo nome nesta pasta.
+    </footer>
+  </main>
+</body>
+</html>

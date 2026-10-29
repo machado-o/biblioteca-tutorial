@@ -1,0 +1,492 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Módulo Acervo (catalog) — fatias verticais",
+    "output": "modulo-acervo.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Fatia vertical (features/*/route.ts)"
+        },
+        "backend": {
+          "label": "Código do módulo"
+        },
+        "messagebus": {
+          "label": "Integração entre módulos"
+        },
+        "external": {
+          "label": "Serviço externo"
+        }
+      }
+    },
+    "views": [
+      {
+        "id": "livros",
+        "label": "Fatias de livros",
+        "focus": [
+          "uc01",
+          "uc02",
+          "uc03",
+          "uc04",
+          "catalogo",
+          "pg"
+        ],
+        "note": "As fatias de livros usam infrastructure/books.ts; create, update e delete reindexam o livro depois do COMMIT."
+      },
+      {
+        "id": "exemplares",
+        "label": "Fatias de exemplares",
+        "focus": [
+          "uc13",
+          "uc14",
+          "uc15",
+          "uc16",
+          "exemplares",
+          "pg"
+        ],
+        "note": "As fatias de exemplares cuidam das cópias físicas; create-copy gera o RegistrationNumber com acervo_sequencias."
+      },
+      {
+        "id": "semantica",
+        "label": "Busca semântica (UC24)",
+        "focus": [
+          "uc24",
+          "indice",
+          "redis",
+          "gemini"
+        ],
+        "note": "O UC24 vira a consulta em vetor com o Gemini, pede ao Redis os livros mais próximos e confirma cada um no Postgres."
+      },
+      {
+        "id": "integracao",
+        "label": "Dados de outros módulos",
+        "focus": [
+          "catalogo",
+          "exemplares",
+          "integracao",
+          "pg"
+        ],
+        "note": "Autor, disponibilidade, histórico e a invalidação do cache de autores passam pela porta CatalogIntegration (src/integration)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "uc24",
+      "type": "frontend",
+      "label": "semantic-search-books · UC24",
+      "sublabel": "GET /busca-semantica/livros",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        210,
+        64
+      ]
+    },
+    {
+      "id": "uc01",
+      "type": "frontend",
+      "label": "create-book · UC01",
+      "sublabel": "POST /livros",
+      "pos": [
+        300,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "uc02",
+      "type": "frontend",
+      "label": "search-books · UC02",
+      "sublabel": "GET /livros",
+      "pos": [
+        470,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "uc03",
+      "type": "frontend",
+      "label": "update-book · UC03",
+      "sublabel": "PUT /livros/:id",
+      "pos": [
+        640,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "uc04",
+      "type": "frontend",
+      "label": "delete-book · UC04",
+      "sublabel": "DELETE /livros/:id",
+      "pos": [
+        810,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "uc13",
+      "type": "frontend",
+      "label": "create-copy · UC13",
+      "sublabel": "POST /exemplares",
+      "pos": [
+        1040,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "uc14",
+      "type": "frontend",
+      "label": "search-copies · UC14",
+      "sublabel": "GET /exemplares",
+      "pos": [
+        1210,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "uc15",
+      "type": "frontend",
+      "label": "update-copy · UC15",
+      "sublabel": "PUT /exemplares/:id",
+      "pos": [
+        1380,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "uc16",
+      "type": "frontend",
+      "label": "delete-copy · UC16",
+      "sublabel": "DELETE /exemplares/:id",
+      "pos": [
+        1550,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "indice",
+      "type": "backend",
+      "label": "bookIndex.ts",
+      "sublabel": "índice vetorial · KNN",
+      "pos": [
+        55,
+        320
+      ],
+      "size": [
+        180,
+        64
+      ],
+      "tag": "infrastructure/"
+    },
+    {
+      "id": "catalogo",
+      "type": "backend",
+      "label": "books.ts",
+      "sublabel": "livros · BookLimit",
+      "pos": [
+        540,
+        320
+      ],
+      "size": [
+        180,
+        64
+      ],
+      "tag": "infrastructure/"
+    },
+    {
+      "id": "integracao",
+      "type": "messagebus",
+      "label": "catalogIntegration",
+      "sublabel": "CatalogIntegration",
+      "pos": [
+        910,
+        320
+      ],
+      "size": [
+        180,
+        64
+      ],
+      "tag": "src/integration"
+    },
+    {
+      "id": "exemplares",
+      "type": "backend",
+      "label": "copies.ts",
+      "sublabel": "findCopyView · situação",
+      "pos": [
+        1280,
+        320
+      ],
+      "size": [
+        180,
+        64
+      ],
+      "tag": "infrastructure/"
+    },
+    {
+      "id": "redis",
+      "type": "database",
+      "label": "Redis 8",
+      "sublabel": "acervo:livro:* · HNSW",
+      "pos": [
+        55,
+        540
+      ],
+      "size": [
+        180,
+        64
+      ],
+      "tag": "dados derivados"
+    },
+    {
+      "id": "gemini",
+      "type": "external",
+      "label": "Gemini API",
+      "sublabel": "embeddings",
+      "pos": [
+        300,
+        540
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "pg",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "inTransaction · Bun.sql",
+      "pos": [
+        910,
+        540
+      ],
+      "size": [
+        180,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "features · busca semântica",
+      "wraps": [
+        "uc24"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "features · livros",
+      "wraps": [
+        "uc01",
+        "uc02",
+        "uc03",
+        "uc04"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "features · exemplares",
+      "wraps": [
+        "uc13",
+        "uc14",
+        "uc15",
+        "uc16"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "uc01-cat",
+      "from": "uc01",
+      "to": "catalogo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc02-cat",
+      "from": "uc02",
+      "to": "catalogo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc03-cat",
+      "from": "uc03",
+      "to": "catalogo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc04-cat",
+      "from": "uc04",
+      "to": "catalogo",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc13-ex",
+      "from": "uc13",
+      "to": "exemplares",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc14-ex",
+      "from": "uc14",
+      "to": "exemplares",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc15-ex",
+      "from": "uc15",
+      "to": "exemplares",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "uc16-ex",
+      "from": "uc16",
+      "to": "exemplares",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "cat-int",
+      "from": "catalogo",
+      "to": "integracao",
+      "label": "autor · situação",
+      "variant": "dashed"
+    },
+    {
+      "id": "ex-int",
+      "from": "exemplares",
+      "to": "integracao",
+      "label": "situação",
+      "variant": "dashed"
+    },
+    {
+      "id": "cat-pg",
+      "from": "catalogo",
+      "to": "pg",
+      "label": "livros",
+      "variant": "emphasis"
+    },
+    {
+      "id": "ex-pg",
+      "from": "exemplares",
+      "to": "pg",
+      "label": "exemplares",
+      "variant": "emphasis"
+    },
+    {
+      "id": "int-pg",
+      "from": "integracao",
+      "to": "pg",
+      "label": "autores · reservas · emprestimos",
+      "variant": "dashed",
+      "labelDy": 24
+    },
+    {
+      "id": "uc24-ind",
+      "from": "uc24",
+      "to": "indice",
+      "label": "KNN",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "ind-redis",
+      "from": "indice",
+      "to": "redis",
+      "label": "vetores",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "ind-gemini",
+      "from": "indice",
+      "to": "gemini",
+      "label": "embeddings",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Fatias",
+      "items": [
+        "Cada route.ts lê o HTTP e chama o caso da sua fatia",
+        "search-books também mantém a busca legada GET /livros/:q",
+        "UC24 responde em GET /busca-semantica/livros"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Domínio",
+      "items": [
+        "Isbn, RegistrationNumber e BookLimit em domain/",
+        "Exemplar sempre ligado a um livro do catálogo"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Integração",
+      "items": [
+        "syncAuthorBookCounts atualiza livros_no_acervo",
+        "copyAvailability consulta reservas e emprestimos",
+        "delete-copy usa copyHasHistory para barrar a exclusão"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Índice semântico",
+      "items": [
+        "Derivado do Postgres: some e se reconstrói",
+        "Sem Redis ou sem chave do Gemini, o UC24 responde 503"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,556 @@
+{
+  "source": "Open Library",
+  "consultedOn": "2026-10-15",
+  "authors": [
+    {
+      "name": "Agatha Christie",
+      "source": "https://openlibrary.org/authors/OL27695A",
+      "books": [
+        {
+          "title": "E não sobrou nenhum - Edição de luxo",
+          "isbn": "9786559870332",
+          "source": "https://openlibrary.org/works/OL471565W"
+        }
+      ]
+    },
+    {
+      "name": "Alexandre Dumas",
+      "source": "https://openlibrary.org/authors/OL18236A",
+      "books": [
+        {
+          "title": "O conde de Monte Cristo",
+          "isbn": "9788537815106",
+          "source": "https://openlibrary.org/works/OL36287W"
+        }
+      ]
+    },
+    {
+      "name": "Aluísio Azevedo",
+      "source": "https://openlibrary.org/authors/OL240039A",
+      "books": [
+        {
+          "title": "Conventillo, El",
+          "isbn": "9789879551035",
+          "source": "https://openlibrary.org/works/OL7663654W"
+        }
+      ]
+    },
+    {
+      "name": "Anton Chekhov",
+      "source": "https://openlibrary.org/authors/OL19677A",
+      "books": [
+        {
+          "title": "Uncle Vanya (Oxford Paperbacks)",
+          "isbn": "9780192811639",
+          "source": "https://openlibrary.org/works/OL55527W"
+        }
+      ]
+    },
+    {
+      "name": "Ariano Suassuna",
+      "source": "https://openlibrary.org/authors/OL94828A",
+      "books": [
+        {
+          "title": "Os homens de barro",
+          "isbn": "9788503011174",
+          "source": "https://openlibrary.org/works/OL22337553W"
+        }
+      ]
+    },
+    {
+      "name": "Arthur Conan Doyle",
+      "source": "https://openlibrary.org/authors/OL161167A",
+      "books": [
+        {
+          "title": "White Company, Arthur Doyle Conan",
+          "isbn": "9781725540828",
+          "source": "https://openlibrary.org/works/OL41753591W"
+        }
+      ]
+    },
+    {
+      "name": "Bram Stoker",
+      "source": "https://openlibrary.org/authors/OL31727A",
+      "books": [
+        {
+          "title": "Jewel of Seven Stars",
+          "isbn": "9780141198644",
+          "source": "https://openlibrary.org/works/OL85891W"
+        }
+      ]
+    },
+    {
+      "name": "Carlos Drummond de Andrade",
+      "source": "https://openlibrary.org/authors/OL93585A",
+      "books": [
+        {
+          "title": "Sentimiento del mundo =",
+          "isbn": "9788475178653",
+          "source": "https://openlibrary.org/works/OL1005314W"
+        }
+      ]
+    },
+    {
+      "name": "Charles Dickens",
+      "source": "https://openlibrary.org/authors/OL24638A",
+      "books": [
+        {
+          "title": "Tale of Two Cities",
+          "isbn": "9780006940470",
+          "source": "https://openlibrary.org/works/OL8193465W"
+        }
+      ]
+    },
+    {
+      "name": "Charlotte Brontë",
+      "source": "https://openlibrary.org/authors/OL113362A",
+      "books": [
+        {
+          "title": "Jane Eyre",
+          "isbn": "9780004244327",
+          "source": "https://openlibrary.org/works/OL1095427W"
+        }
+      ]
+    },
+    {
+      "name": "Clarice Lispector",
+      "source": "https://openlibrary.org/authors/OL93118A",
+      "books": [
+        {
+          "title": "Passion According to G. H",
+          "isbn": "9780141197357",
+          "source": "https://openlibrary.org/works/OL1002138W"
+        }
+      ]
+    },
+    {
+      "name": "Eça de Queirós",
+      "source": "https://openlibrary.org/authors/OL73090A",
+      "books": [
+        {
+          "title": "The Maias",
+          "isbn": "9780370005577",
+          "source": "https://openlibrary.org/works/OL846513W"
+        }
+      ]
+    },
+    {
+      "name": "Émile Zola",
+      "source": "https://openlibrary.org/authors/OL32772A",
+      "books": [
+        {
+          "title": "Germinal (Penguin Classics)",
+          "isbn": "9780140440454",
+          "source": "https://openlibrary.org/works/OL118986W"
+        }
+      ]
+    },
+    {
+      "name": "Érico Veríssimo",
+      "source": "https://openlibrary.org/authors/OL121112A",
+      "books": [
+        {
+          "title": "Olhai os lírios do campo",
+          "isbn": "9788535906097",
+          "source": "https://openlibrary.org/works/OL10342477W"
+        }
+      ]
+    },
+    {
+      "name": "Ernest Hemingway",
+      "source": "https://openlibrary.org/authors/OL13640A",
+      "books": [
+        {
+          "title": "O Velho e o Mar",
+          "isbn": "9788528617986",
+          "source": "https://openlibrary.org/works/OL63073W"
+        }
+      ]
+    },
+    {
+      "name": "Fernando Pessoa",
+      "source": "https://openlibrary.org/authors/OL73160A",
+      "books": [
+        {
+          "title": "Fernando Pessoa",
+          "isbn": "9781906614096",
+          "source": "https://openlibrary.org/works/OL32375911W"
+        }
+      ]
+    },
+    {
+      "name": "Franz Kafka",
+      "source": "https://openlibrary.org/authors/OL33146A",
+      "books": [
+        {
+          "title": "A Metamorfose",
+          "isbn": "9788525410467",
+          "source": "https://openlibrary.org/works/OL498556W"
+        }
+      ]
+    },
+    {
+      "name": "F. Scott Fitzgerald",
+      "source": "https://openlibrary.org/authors/OL27349A",
+      "books": [
+        {
+          "title": "Tender Is the Night",
+          "isbn": "9780007449484",
+          "source": "https://openlibrary.org/works/OL468485W"
+        }
+      ]
+    },
+    {
+      "name": "Fyodor Dostoevsky",
+      "source": "https://openlibrary.org/authors/OL22242A",
+      "books": [
+        {
+          "title": "White Nights / Bobock",
+          "isbn": "9780241252086",
+          "source": "https://openlibrary.org/works/OL36196411W"
+        }
+      ]
+    },
+    {
+      "name": "Gabriel García Márquez",
+      "source": "https://openlibrary.org/authors/OL27363A",
+      "books": [
+        {
+          "title": "Cem Anos de Solidão",
+          "isbn": "9788501012074",
+          "source": "https://openlibrary.org/works/OL274505W"
+        }
+      ]
+    },
+    {
+      "name": "Graciliano Ramos",
+      "source": "https://openlibrary.org/authors/OL10833300A",
+      "books": [
+        {
+          "title": "Vidas secas",
+          "isbn": "9788501114785",
+          "source": "https://openlibrary.org/works/OL31247718W"
+        }
+      ]
+    },
+    {
+      "name": "Gustave Flaubert",
+      "source": "https://openlibrary.org/authors/OL79039A",
+      "books": [
+        {
+          "title": "Madame Bovary",
+          "isbn": "9780007420308",
+          "source": "https://openlibrary.org/works/OL893707W"
+        }
+      ]
+    },
+    {
+      "name": "Harper Lee",
+      "source": "https://openlibrary.org/authors/OL498120A",
+      "books": [
+        {
+          "title": "To Kill a Mockingbird",
+          "isbn": "9780060173227",
+          "source": "https://openlibrary.org/works/OL3140822W"
+        }
+      ]
+    },
+    {
+      "name": "Hermann Hesse",
+      "source": "https://openlibrary.org/authors/OL76437A",
+      "books": [
+        {
+          "title": "Siddhartha",
+          "isbn": "9780023305405",
+          "source": "https://openlibrary.org/works/OL872932W"
+        }
+      ]
+    },
+    {
+      "name": "H. G. Wells",
+      "source": "https://openlibrary.org/authors/OL13066A",
+      "books": [
+        {
+          "title": "A maquina do tempo",
+          "isbn": "9788537818190",
+          "source": "https://openlibrary.org/works/OL52267W"
+        }
+      ]
+    },
+    {
+      "name": "Isabel Allende",
+      "source": "https://openlibrary.org/authors/OL228079A",
+      "books": [
+        {
+          "title": "La casa de los espíritus",
+          "isbn": "9780060951306",
+          "source": "https://openlibrary.org/works/OL1905255W"
+        }
+      ]
+    },
+    {
+      "name": "Jane Austen",
+      "source": "https://openlibrary.org/authors/OL21594A",
+      "books": [
+        {
+          "title": "Jane Austen",
+          "isbn": "9780415125383",
+          "source": "https://openlibrary.org/works/OL25086286W"
+        }
+      ]
+    },
+    {
+      "name": "João Guimarães Rosa",
+      "source": "https://openlibrary.org/authors/OL204214A",
+      "books": [
+        {
+          "title": "Grande sertão: veredas",
+          "isbn": "9786559210572",
+          "source": "https://openlibrary.org/works/OL1756937W"
+        }
+      ]
+    },
+    {
+      "name": "John Steinbeck",
+      "source": "https://openlibrary.org/authors/OL25788A",
+      "books": [
+        {
+          "title": "Of Mice and Men",
+          "isbn": "9780140173208",
+          "source": "https://openlibrary.org/works/OL23204W"
+        }
+      ]
+    },
+    {
+      "name": "José de Alencar",
+      "source": "https://openlibrary.org/authors/OL161946A",
+      "books": [
+        {
+          "title": "Iracema",
+          "isbn": "9788516039776",
+          "source": "https://openlibrary.org/works/OL1525650W"
+        }
+      ]
+    },
+    {
+      "name": "José Saramago",
+      "source": "https://openlibrary.org/authors/OL3112635A",
+      "books": [
+        {
+          "title": "Blindness",
+          "isbn": "9780099573586",
+          "source": "https://openlibrary.org/works/OL27420W"
+        }
+      ]
+    },
+    {
+      "name": "Jules Verne",
+      "source": "https://openlibrary.org/authors/OL113611A",
+      "books": [
+        {
+          "title": "Around the World in Eighty Days",
+          "isbn": "9780004226729",
+          "source": "https://openlibrary.org/works/OL1100007W"
+        }
+      ]
+    },
+    {
+      "name": "Louisa May Alcott",
+      "source": "https://openlibrary.org/authors/OL26680A",
+      "books": [
+        {
+          "title": "Little Women (Boys' & Girls' Library)",
+          "isbn": "9780001660045",
+          "source": "https://openlibrary.org/works/OL29983W"
+        }
+      ]
+    },
+    {
+      "name": "Lygia Fagundes Telles",
+      "source": "https://openlibrary.org/authors/OL94543A",
+      "books": [
+        {
+          "title": "As meninas",
+          "isbn": "9788535914306",
+          "source": "https://openlibrary.org/works/OL1010355W"
+        }
+      ]
+    },
+    {
+      "name": "Machado de Assis",
+      "source": "https://openlibrary.org/authors/OL93286A",
+      "books": [
+        {
+          "title": "Memórias Póstumas de Brás Cubas",
+          "isbn": "9788525044655",
+          "source": "https://openlibrary.org/works/OL1003017W"
+        }
+      ]
+    },
+    {
+      "name": "Manuel Bandeira",
+      "source": "https://openlibrary.org/authors/OL123449A",
+      "books": [
+        {
+          "title": "Crônicas inéditas",
+          "isbn": "9788575036181",
+          "source": "https://openlibrary.org/works/OL15065626W"
+        }
+      ]
+    },
+    {
+      "name": "Mário de Andrade",
+      "source": "https://openlibrary.org/authors/OL93432A",
+      "books": [
+        {
+          "title": "Macunaíma, o herói sem nenhum caráter",
+          "isbn": "9788522007707",
+          "source": "https://openlibrary.org/works/OL1004273W"
+        }
+      ]
+    },
+    {
+      "name": "Mario Vargas Llosa",
+      "source": "https://openlibrary.org/authors/OL74490A",
+      "books": [
+        {
+          "title": "The Feast of the Goat",
+          "isbn": "9780312420277",
+          "source": "https://openlibrary.org/works/OL857600W"
+        }
+      ]
+    },
+    {
+      "name": "Mark Twain",
+      "source": "https://openlibrary.org/authors/OL18319A",
+      "books": [
+        {
+          "title": "The Adventures of Tom Sawyer",
+          "isbn": "9780007420117",
+          "source": "https://openlibrary.org/works/OL53919W"
+        }
+      ]
+    },
+    {
+      "name": "Mary Shelley",
+      "source": "https://openlibrary.org/authors/OL25342A",
+      "books": [
+        {
+          "title": "Frankenstein",
+          "isbn": "9786558881070",
+          "source": "https://openlibrary.org/works/OL450063W"
+        }
+      ]
+    },
+    {
+      "name": "Monteiro Lobato",
+      "source": "https://openlibrary.org/authors/OL93227A",
+      "books": [
+        {
+          "title": "Caçadas de Pedrinho",
+          "isbn": "9788525048042",
+          "source": "https://openlibrary.org/works/OL26173003W"
+        }
+      ]
+    },
+    {
+      "name": "Oscar Wilde",
+      "source": "https://openlibrary.org/authors/OL20646A",
+      "books": [
+        {
+          "title": "O Retrato de Dorian Gray",
+          "isbn": "9786555980004",
+          "source": "https://openlibrary.org/works/OL8193416W"
+        }
+      ]
+    },
+    {
+      "name": "Rachel de Queiroz",
+      "source": "https://openlibrary.org/authors/OL93344A",
+      "books": [
+        {
+          "title": "O Quinze",
+          "isbn": "9788503008051",
+          "source": "https://openlibrary.org/works/OL20301301W"
+        }
+      ]
+    },
+    {
+      "name": "Robert Louis Stevenson",
+      "source": "https://openlibrary.org/authors/OL25963A",
+      "books": [
+        {
+          "title": "Treasure Island",
+          "isbn": "9780001204041",
+          "source": "https://openlibrary.org/works/OL24034W"
+        }
+      ]
+    },
+    {
+      "name": "Rubem Fonseca",
+      "source": "https://openlibrary.org/authors/OL93114A",
+      "books": [
+        {
+          "title": "High Art",
+          "isbn": "9780002228916",
+          "source": "https://openlibrary.org/works/OL1002096W"
+        }
+      ]
+    },
+    {
+      "name": "Thomas Mann",
+      "source": "https://openlibrary.org/authors/OL22973A",
+      "books": [
+        {
+          "title": "The Magic Mountain",
+          "isbn": "9780075536659",
+          "source": "https://openlibrary.org/works/OL14866824W"
+        }
+      ]
+    },
+    {
+      "name": "Toni Morrison",
+      "source": "https://openlibrary.org/authors/OL31120A",
+      "books": [
+        {
+          "title": "Amada",
+          "isbn": "9788535910698",
+          "source": "https://openlibrary.org/works/OL50548W"
+        }
+      ]
+    },
+    {
+      "name": "Victor Hugo",
+      "source": "https://openlibrary.org/authors/OL107571A",
+      "books": [
+        {
+          "title": "Misérables de Victor Hugo",
+          "isbn": "9798763520798",
+          "source": "https://openlibrary.org/works/OL27169134W"
+        }
+      ]
+    },
+    {
+      "name": "Virginia Woolf",
+      "source": "https://openlibrary.org/authors/OL19450A",
+      "books": [
+        {
+          "title": "To the Lighthouse (Flamingo Modern Classics)",
+          "isbn": "9780006547563",
+          "source": "https://openlibrary.org/works/OL39396W"
+        }
+      ]
+    },
+    {
+      "name": "William Shakespeare",
+      "source": "https://openlibrary.org/authors/OL9388A",
+      "books": [
+        {
+          "title": "Antony and Cleopatra",
+          "isbn": "9781075607820",
+          "source": "https://openlibrary.org/works/OL25377834W"
+        }
+      ]
+    }
+  ]
+}
