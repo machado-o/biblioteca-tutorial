@@ -11,8 +11,6 @@ export function registerRoutes(api: Hono): void {
   api.post("/leitores", async c => {
     const body = await readJsonBody(c);
     const reader = await inTransaction(tx => new CreateReader(new PostgresReaderRepository(tx)).execute(body));
-    // depois do COMMIT: em Leitores a transação abre e fecha aqui na rota, então
-    // só quando o inTransaction termina o leitor novo é visível para quem buscar
     await invalidateReaderSearch();
     return c.json(readerJson(reader), 201);
   });

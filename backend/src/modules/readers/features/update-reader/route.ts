@@ -12,7 +12,6 @@ export function registerRoutes(api: Hono): void {
     const id = parsePositiveId(c.req.param("id"));
     const body = await readJsonBody(c);
     const reader = await inTransaction(tx => new UpdateReader(new PostgresReaderRepository(tx)).execute(id, body));
-    // depois do COMMIT, que acontece quando o inTransaction da rota termina
     await invalidateReaderSearch();
     return c.json(readerJson(reader));
   });

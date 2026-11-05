@@ -6,11 +6,10 @@ import { PostgresReaderRepository } from "../../infrastructure/PostgresReaderRep
 import { SearchReaders } from "./SearchReaders";
 import { searchReadersCached } from "./searchReadersCached";
 
-/** UC10: busca leitores, com cache no Redis, e consulta um leitor. */
+/** UC10: busca leitores e consulta um leitor. */
 export function registerRoutes(api: Hono): void {
   api.get("/leitores", async c => {
     const { readers, cache } = await searchReadersCached(c.req.query("q"), new SearchReaders(new PostgresReaderRepository(sql)));
-    // HIT, MISS ou BYPASS (sem Redis): dá para ver o cache funcionando no DevTools
     c.header("X-Cache", cache);
     return c.json(readers.map(readerJson));
   });

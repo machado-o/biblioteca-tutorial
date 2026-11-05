@@ -11,7 +11,6 @@ export function registerRoutes(api: Hono): void {
   api.delete("/leitores/:id", async c => {
     const id = parsePositiveId(c.req.param("id"));
     await inTransaction(tx => new DeleteReader(new PostgresReaderRepository(tx), new PostgresReaderHistory(tx)).execute(id));
-    // depois do COMMIT, que acontece quando o inTransaction da rota termina
     await invalidateReaderSearch();
     return c.body(null, 204);
   });

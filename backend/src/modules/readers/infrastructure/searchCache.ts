@@ -4,33 +4,18 @@ import type { Reader } from "../domain/Reader";
 
 export type CacheStatus = "HIT" | "MISS" | "BYPASS";
 
-/** Um resultado em cache vale por 60 s mesmo que ninguém o invalide. */
 const TTL_SECONDS = 60;
 
 const GENERATION = redisKey("leitores", "buscas", "geracao");
 
-/**
- * Cada geração é um hash: um campo por termo buscado, cada campo com o próprio
- * TTL (HSETEX, novo no Redis 8). Quando todos os campos expiram, o hash some.
- */
 function generationHash(generation: number): string {
   return redisKey("leitores", "buscas", String(generation));
 }
 
-/**
- * A busca usa ILIKE: " Ana " e "ana" são o mesmo resultado, e sem q é o mesmo
- * que q vazio. O CPF com e sem máscara não é unificado aqui: o termo pontuado
- * também é comparado por ILIKE com o e-mail, então os dois nem sempre devolvem
- * a mesma lista.
- */
 function field(term = ""): string {
   return `q:${term.trim().toLocaleLowerCase("pt-BR")}`;
 }
 
-/**
- * Lê a geração atual e, nela, o resultado do termo. Devolve null quando não há
- * Redis (bypass): quem chamou segue direto para o Postgres.
- */
 export async function readCachedSearch(term: string | undefined, client: RedisClient | null = redis): Promise<{ generation: number; readers: Reader[] | null } | null> {
   if (!client) return null;
   try {
@@ -44,11 +29,6 @@ export async function readCachedSearch(term: string | undefined, client: RedisCl
   }
 }
 
-/**
- * Grava na geração que estava valendo quando a leitura começou. Se uma escrita
- * invalidou o cache no meio do caminho, este resultado (talvez velho) vai para
- * uma geração que ninguém mais lê, e expira sozinho.
- */
 export async function writeCachedSearch(term: string | undefined, generation: number, readers: Reader[], client: RedisClient | null = redis): Promise<void> {
   if (!client) return;
   try {
@@ -59,11 +39,6 @@ export async function writeCachedSearch(term: string | undefined, generation: nu
   }
 }
 
-/**
- * Invalida todas as buscas de uma vez: a próxima leitura procura na geração
- * seguinte, que começa vazia. Chame depois do COMMIT; antes dele, uma leitura
- * concorrente ainda veria o dado antigo no Postgres e o gravaria na geração nova.
- */
 export async function invalidateReaderSearch(client: RedisClient | null = redis): Promise<void> {
   if (!client) return;
   try {

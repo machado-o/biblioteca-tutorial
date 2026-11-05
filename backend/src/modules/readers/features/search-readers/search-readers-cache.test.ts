@@ -77,7 +77,6 @@ test("UC10: resultado velho gravado numa geração antiga não é lido", async (
   const term = crypto.randomUUID();
   const read = await readCachedSearch(term);
   expect(read!.readers).toBeNull();
-  // uma escrita termina entre a leitura no Postgres e a gravação no cache
   await invalidateReaderSearch();
   await writeCachedSearch(term, read!.generation, [{ id: 1, name: "Velho", cpf: "52998224725", email: "velho@exemplo.com", phone: "27999991234" }]);
   expect((await readCachedSearch(term))!.readers).toBeNull();
@@ -102,37 +101,3 @@ test("UC10: cada termo guardado expira sozinho", async () => {
   expect(ttl).toBeGreaterThan(0);
   expect(ttl).toBeLessThanOrEqual(60);
 });
-
-/*
- * Para discutir (passo 06)
- *
- * 1. Valeu a pena? A busca de leitores é uma consulta só, com ILIKE '%termo%'
- *    em nome, e-mail e CPF. Sem índice que sirva a um ILIKE com curinga no
- *    começo, o Postgres varre a tabela inteira; com poucas centenas de leitores
- *    isso leva menos que a ida ao Redis, e o cache quase não economiza. Ele
- *    passa a compensar quando a tabela cresce (dezenas de milhares de leitores)
- *    e os mesmos termos se repetem muito, por exemplo o balcão listando todos
- *    (q vazio) várias vezes por minuto, entre escritas raras.
- *
- * 2. Dados pessoais no Redis. O cache é uma segunda cópia de CPF, e-mail e
- *    telefone. O TTL de 60 s limita quanto tempo um dado excluído sobrevive, e
- *    sem volume o Redis não deixa nada em disco; mas, enquanto vive, o dado
- *    pode ser lido por qualquer um com acesso ao Redis, que aqui não tem senha
- *    nem TLS. Num sistema de verdade eu guardaria só os ids (e buscaria os
- *    dados no Postgres) ou, no mínimo, exigiria ACL, TLS e registraria o Redis
- *    como local de tratamento na documentação da LGPD.
- *
- * 3. Por que geração, e não DEL? Com DEL, uma leitura que começou antes da
- *    escrita pode ler o dado antigo no Postgres, a escrita faz COMMIT e apaga a
- *    chave, e só então a leitura grava o resultado velho, numa chave que agora
- *    ninguém vai apagar: o cache fica errado até o TTL. Com a geração, essa
- *    leitura grava na geração que leu no começo, que a escrita já deixou para
- *    trás; ninguém mais lê ali.
- *
- * 4. Invalidar tudo. Daria para invalidar só os termos afetados, mas seria
- *    preciso saber, para cada leitor alterado, quais termos o encontram (antes
- *    e depois da edição), refazendo a lógica do ILIKE no cache, ou manter um
- *    índice reverso leitor -> termos. É bem mais código e mais chances de errar:
- *    um termo esquecido mostra dados velhos, e a corrida do item 3 volta para
- *    cada termo. Com escritas raras, jogar fora tudo é mais simples e seguro.
- */
