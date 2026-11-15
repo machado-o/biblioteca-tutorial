@@ -44,7 +44,8 @@ services:
     profiles: ["test"]
 
   db:
-    image: postgres:18
+    # o mesmo Postgres 18, com a extensão pgvector já compilada (busca semântica)
+    image: pgvector/pgvector:pg18
     environment:
       POSTGRES_USER: biblioteca
       POSTGRES_PASSWORD: biblioteca
@@ -61,7 +62,7 @@ services:
       timeout: 3s
       retries: 15
 
-  # Redis 8: cache e índice da busca semântica. Sem "ports" e sem volume de
+  # Redis 8: cache da busca de autores. Sem "ports" e sem volume de
   # propósito: ele só guarda dados derivados. Se o contêiner sumir, o servidor
   # reconstrói tudo a partir do Postgres, que continua sendo a fonte da verdade.
   redis:

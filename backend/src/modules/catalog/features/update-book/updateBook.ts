@@ -2,7 +2,7 @@ import { inTransaction } from "../../../../infrastructure/transaction";
 import { civilDate } from "../../../../shared/dates";
 import type { BookInput, BookView } from "../../domain/Book";
 import type { CatalogIntegration } from "../../domain/CatalogIntegration";
-import { syncBookIndex } from "../../infrastructure/bookIndex";
+import { syncBookIndex } from "../../infrastructure/bookVectors";
 import { checkBookRules, findBook, toBookView, type BookRow } from "../../infrastructure/books";
 
 export async function updateBook(id: number, input: BookInput, integration: CatalogIntegration, now = new Date()): Promise<BookView> {
