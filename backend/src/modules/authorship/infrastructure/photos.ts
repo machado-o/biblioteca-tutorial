@@ -1,14 +1,10 @@
-import { NotImplemented } from "../../../shared/errors";
+import { objectKey } from "../../../infrastructure/storage";
 
 /**
  * UC26: a chave da foto no bucket. Fixa por autor: uma foto nova substitui a
- * anterior.
- *
- * TODO (atividade): monte a chave com objectKey(...), de infrastructure/storage.
- * O primeiro trecho diz o módulo dono do objeto, como em redisKey(...). Compare
- * com coverKey, em modules/catalog/infrastructure/covers.ts, e rode
- * `bun run check-boundaries` para conferir o dono.
+ * anterior. "autoria" no primeiro trecho diz que o objeto pertence a este módulo,
+ * o mesmo dono das chaves do cache da busca de autores.
  */
 export function photoKey(authorId: number): string {
-  throw new NotImplemented(`UC26 ainda não implementado: photoKey(${authorId})`);
+  return objectKey("autoria", "autores", authorId, "foto");
 }
