@@ -7,7 +7,6 @@ import type { EmailSender } from "../../../shared/EmailSender";
 import { circulationDependencies } from "./dependencies";
 import { receiptEmail } from "./receiptEmail";
 
-/** O stream dos comprovantes. O primeiro trecho diz o dono: a Circulação. */
 export const LOAN_RECEIPT_STREAM = redisKey("circulacao", "fila", "comprovantes");
 
 /** A mensagem leva só o id do empréstimo: o resto, o worker lê na hora de enviar. */
@@ -21,11 +20,6 @@ type LoanRow = { id: number; readerId: number; copyId: number; loanedOn: string;
 /**
  * Manda o comprovante do empréstimo ao leitor, uma vez só. Lança quando o envio
  * falha: no worker, sem o XACK, a fila entrega a mensagem de novo mais tarde.
- *
- * A marca vem DEPOIS do envio. Se o processo morrer entre os dois, a fila entrega
- * a mensagem de novo e o leitor recebe o comprovante duas vezes; na ordem inversa,
- * ele poderia não receber nenhum. Para um comprovante, repetido é melhor que
- * nenhum. E um envio que falhou nunca deixa a coluna preenchida.
  */
 export async function sendLoanReceipt(loanId: number, sender: EmailSender | null = emailSender): Promise<ReceiptOutcome> {
   if (!sender) return "sem remetente";
@@ -38,7 +32,6 @@ export async function sendLoanReceipt(loanId: number, sender: EmailSender | null
   if (!loan) return "empréstimo não encontrado";
   if (loan.sentAt) return "já enviado";
 
-  // o e-mail mora em Leitores: chega pela porta, lido agora, não quando o pedido foi feito
   const [, lookup] = circulationDependencies(sql);
   const [reader, copy] = await Promise.all([lookup.reader(loan.readerId), lookup.copy(loan.copyId)]);
   if (!reader || !copy) throw new Error(`Leitor ou exemplar do empréstimo ${loanId} não encontrado`);
@@ -58,8 +51,7 @@ export async function sendLoanReceipt(loanId: number, sender: EmailSender | null
 
 /**
  * UC19: pede o comprovante e volta na hora. Quem chama precisa estar depois do
- * COMMIT do empréstimo. Sem fila, ou com ela fora do ar, envia aqui mesmo; uma
- * falha nesse envio vira aviso no log, porque o empréstimo já está gravado.
+ * COMMIT do empréstimo.
  */
 export async function scheduleLoanReceipt(
   loanId: number,
@@ -74,15 +66,13 @@ export async function scheduleLoanReceipt(
   }
 }
 
-/** A tarefa do lado do worker. Ao contrário do envio na hora, aqui a falha sobe: a fila tenta de novo. */
+/** A tarefa do lado do worker, como bookIndexJob. */
 export function loanReceiptJob(sender: EmailSender | null = emailSender): Job<LoanReceiptTask> {
   return {
     stream: LOAN_RECEIPT_STREAM,
     async handle(task) {
-      // a mensagem é dado externo: confere antes de usar
       if (!Number.isInteger(task?.loanId)) throw new Error("Tarefa de comprovante sem o id do empréstimo");
       const outcome = await sendLoanReceipt(task.loanId, sender);
-      // o id, nunca o e-mail: o endereço do leitor é dado pessoal e não vai para o log
       console.log(`Comprovante do empréstimo ${task.loanId}: ${outcome}`);
     },
   };
