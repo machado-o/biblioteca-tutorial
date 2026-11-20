@@ -13,8 +13,5 @@ export async function deleteAuthor(id: number, integration: AuthorshipIntegratio
     await tx`DELETE FROM autores WHERE id = ${id}`;
   });
   await invalidateAuthorSearch();
-  // depois do COMMIT: a foto, se houver, sai do bucket. Um autor recusado com 409
-  // nunca chega aqui, e uma falha do RustFS só deixa um objeto órfão (discardObject
-  // não lança), sem transformar em 503 uma exclusão já confirmada.
   await discardObject(photoKey(id));
 }

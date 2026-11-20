@@ -4,17 +4,11 @@ import { NotFound } from "../../../../shared/errors";
 import { photoKey } from "../../infrastructure/photos";
 import { invalidateAuthorSearch } from "../../infrastructure/searchCache";
 
-/**
- * UC26: a ordem é a inversa do envio. Primeiro o Postgres esquece a foto; depois
- * o objeto sai do bucket. Se o RustFS falhar nesse último passo, sobra um objeto
- * órfão, mas nenhum autor aponta para ele.
- */
+/** UC26: remove a foto do autor. */
 export async function removeAuthorPhoto(id: number, client = storage): Promise<void> {
-  // sem RustFS, 503 antes de mexer no banco
   requireStorage(client);
   const [row] = await inTransaction((tx) => tx`UPDATE autores SET foto_atualizada_em = NULL WHERE id = ${id} RETURNING id`);
   if (!row) throw new NotFound("Autor não encontrado");
-  // depois do COMMIT: a busca não pode continuar mostrando a foto removida
   await invalidateAuthorSearch();
   await discardObject(photoKey(id), client);
 }
